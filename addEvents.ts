@@ -1,6 +1,6 @@
-import Moralis from "./node_modules/moralis-v1/node.js";
+import Moralis from "moralis-v1/node.js";
 import "dotenv/config";
-import contractAddresses from "./constants/networkMapping.json" assert { type: "json" };
+import contractAddresses from "./constants/networkMapping.json";
 
 const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 const appId = process.env.NEXT_PUBLIC_APP_ID;

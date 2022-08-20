@@ -16,7 +16,6 @@
     "react-dom": "18.2.0",
     "react-moralis": "^1.4.1"
   },
-  "type": "module",
   "devDependencies": {
     "@types/node": "18.7.5",
     "@types/react": "18.0.17",
