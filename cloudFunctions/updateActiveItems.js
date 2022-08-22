@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-console.log("헬로");
+console.log("서버에 스크립트 업로드");
 Moralis.Cloud.afterSave("ItemListed", function (request) { return __awaiter(void 0, void 0, void 0, function () {
     var confrimed, logger, ActiveItem, activeItem;
     return __generator(this, function (_a) {
@@ -60,6 +60,38 @@ Moralis.Cloud.afterSave("ItemListed", function (request) { return __awaiter(void
                 _a.sent();
                 _a.label = 2;
             case 2: return [2 /*return*/];
+        }
+    });
+}); });
+Moralis.Cloud.afterSave("ItemCancled", function (request) { return __awaiter(void 0, void 0, void 0, function () {
+    var confirmed, logger, ActiveItem, query, canceledItem;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                confirmed = request.object.get("confirmed");
+                logger = Moralis.Cloud.getLogger();
+                logger.info("Marketplace | Object ".concat(request.object));
+                if (!confirmed) return [3 /*break*/, 4];
+                ActiveItem = Moralis.Object.extend("ActiveItem");
+                query = new Moralis.Query(ActiveItem);
+                query.equalTo("marketplaceAddress", request.object.get("address"));
+                query.equalTo("nftAddress", request.object.get("nftAddress"));
+                query.equalTo("tokenId", request.object.get("tokenId"));
+                logger.info("Marketplace | \uCFFC\uB9AC: ".concat(query));
+                return [4 /*yield*/, query.first()];
+            case 1:
+                canceledItem = _a.sent();
+                logger.info("Marketplace | \uCDE8\uC18C\uB41C \uBB3C\uD488: ".concat(canceledItem));
+                if (!canceledItem) return [3 /*break*/, 3];
+                logger.info("\uD310\uB9E4\uAC00 \uCDE8\uC18C\uB418\uC5B4 \uB4F1\uB85D\uB41C ".concat(request.object.get("tokenId"), " \uB97C ").concat(request.object.get("address"), "\uC73C \uC544\uC774\uD15C \uBAA9\uB85D\uC5D0\uC11C \uC81C\uAC70\uD558\uC600\uC2B5\uB2C8\uB2E4."));
+                return [4 /*yield*/, canceledItem.destroy()];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                logger.info("\uC8FC\uC18C:".concat(request.object.get("address"), " \uC5D0\uC11C \uD1A0\uD070\uC544\uC774\uB514\uAC00 ").concat(request.object.get("tokenId"), " \uC778 \uC544\uC774\uD15C\uC744 \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4."));
+                _a.label = 4;
+            case 4: return [2 /*return*/];
         }
     });
 }); });
