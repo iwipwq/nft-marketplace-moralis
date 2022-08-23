@@ -111,7 +111,7 @@ async function main() {
     chainId: moralisChainId,
     address: contractAddress,
     sync_historical: true,
-    topic: "ItemCanceled(address, address, uint256)",
+    topic: "ItemCanceled(address,address,uint256)",
     abi: {
       anonymous: false,
       inputs: [
@@ -137,25 +137,41 @@ async function main() {
       name: "ItemCanceled",
       type: "event",
     },
-    tableName: "ItemCanceled"
+    tableName: "ItemCanceled",
   };
 
-  const listedResponse = await Moralis.Cloud.run("watchContractEvent", itemListedOptions, {
-    useMasterKey: true,
-  })
-  const boughtResponse = await Moralis.Cloud.run("watchContractEvent", itemBoughtOptions, {
-    useMasterKey:true,
-  })
-  const canceledResponse = await Moralis.Cloud.run("watchContractEvent", itemCanceledOptions, {
-    useMasterKey: true,
-  })
+  const listedResponse = await Moralis.Cloud.run(
+    "watchContractEvent",
+    itemListedOptions,
+    {
+      useMasterKey: true,
+    }
+  );
+  const boughtResponse = await Moralis.Cloud.run(
+    "watchContractEvent",
+    itemBoughtOptions,
+    {
+      useMasterKey: true,
+    }
+  );
+  const canceledResponse = await Moralis.Cloud.run(
+    "watchContractEvent",
+    itemCanceledOptions,
+    {
+      useMasterKey: true,
+    }
+  );
 
-  if(listedResponse.success && boughtResponse.success && canceledResponse.success) {
-    console.log("성공! 데이터베이스가 이벤트를 감지하여 업데이트 되었습니다.")
+  if (
+    listedResponse.success &&
+    boughtResponse.success &&
+    canceledResponse.success
+  ) {
+    console.log("성공! 데이터베이스가 이벤트를 감지하여 업데이트 되었습니다.");
   } else {
-    console.log(listedResponse)
-    console.log(boughtResponse)
-    console.log(canceledResponse)
+    console.log(listedResponse);
+    console.log(boughtResponse);
+    console.log(canceledResponse);
     console.log("실패... 무언가 잘못되었습니다...");
   }
 }
