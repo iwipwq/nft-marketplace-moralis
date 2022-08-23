@@ -137,7 +137,7 @@ async function main() {
       name: "ItemCanceled",
       type: "event",
     },
-    tableName: "ItemCancled"
+    tableName: "ItemCanceled"
   };
 
   const listedResponse = await Moralis.Cloud.run("watchContractEvent", itemListedOptions, {
@@ -153,6 +153,9 @@ async function main() {
   if(listedResponse.success && boughtResponse.success && canceledResponse.success) {
     console.log("성공! 데이터베이스가 이벤트를 감지하여 업데이트 되었습니다.")
   } else {
+    console.log(listedResponse)
+    console.log(boughtResponse)
+    console.log(canceledResponse)
     console.log("실패... 무언가 잘못되었습니다...");
   }
 }

@@ -26,15 +26,16 @@ interface ObjectAttribute {
     set<T,U,R>(attr:T,value:U):R;
     save<T,U,R>(attrs?:T, options?:U): Promise<R>;
     destroy<O>(options?: O): Promise<this>;
+    [key:string]:any;
 }
 
-interface ObjectStatic<T extends ObjectAttribute = ObjectAttribute> {
+interface ObjectStatic {
     extend<T>(className: string | { className: string }, protoProps?: any, classProps?: any): {new (...args: T[]):ObjectAttribute};
 }
 
 interface NewQueryObject {
     equalTo<K,R>(key: K,value:RequestObject):R
-    first():ObjectAttribute
+    first():Promise<ObjectAttribute>
 }
 
 interface Moralis {
@@ -73,6 +74,7 @@ Moralis.Cloud.afterSave("ItemCancled",async (request:RequestObject) => {
     if(confirmed) {
         const ActiveItem = Moralis.Object.extend("ActiveItem");
         const query = new Moralis.Query(ActiveItem);
+        logger.info(query);
         query.equalTo("marketplaceAddress", request.object.get("address"));
         query.equalTo("nftAddress", request.object.get("nftAddress"));
         query.equalTo("tokenId", request.object.get("tokenId"));
