@@ -3,7 +3,25 @@ Moralis.Cloud.afterSave("ItemListed",async (request) => {
     const logger = Moralis.Cloud.getLogger();
     logger.info("Tx 컨펌 감시중 ...");
     if(confrimed) {
+        logger.info("아이템을 찾았습니다.");
         const ActiveItem = Moralis.Object.extend("ActiveItem");
+
+        // 리스트가 업데이트 되어야 할 때, 이미 등록된 ActiveItem을 제거
+        const query = new Moralis.Query(ActiveItem);
+        query.equalTo("marketplaceAddress", request.object.get("address"));
+        query.equalTo("nftAddress", request.object.get("nftAddress"));
+        query.equalTo("seller",request.object.get("seller"));
+        query.equalTo("tokenId", request.object.get("tokenId"));
+        logger.info(`Marketplace | query ${query}`);
+        const alreadyListedItem = await query.first();
+
+        if(alreadyListedItem) {
+            logger.info(`아이템이 이미 존재하고 있기떄문에 기존아이템을 파괴하고 새 아이템 ${request.object.get("objectId")}으로 교체합니다.`)
+            await alreadyListedItem.destroy();
+            logger.info(`이미 존재하는 ${request.object.get("address")} 에 있는 토큰아이디 ${request.object.get("tokenId")} 아이템을 제거했습니다. `)
+        }
+
+        //새 아이템 추가(혹은 기존아이템 삭제후 새 상태로 업데이트)
         const activeItem = new ActiveItem()
         activeItem.set("marketplaceAddress", request.object.get("address"))
         activeItem.set("nftAddress", request.object.get("nftAddress"));
