@@ -1,4 +1,4 @@
-import { ConnectButton } from "@web3uikit/web3";
+import ConnectButton from "./ConnectButton";
 import Link from "next/link";
 
 const Header: React.FC = () => {
@@ -12,7 +12,7 @@ const Header: React.FC = () => {
         <Link href="/sell-nft">
           <a className="mr-4 p-6">NFT 판매하기</a>
         </Link>
-        <ConnectButton moralisAuth={false}/>
+        <ConnectButton/>
       </div>
     </nav>
   );

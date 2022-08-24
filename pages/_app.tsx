@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="description" content="NFT를 거래할 수 있는 장터입니다." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL} >
+      <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL}>
         <Header />
         <Component {...pageProps} />
       </MoralisProvider>
