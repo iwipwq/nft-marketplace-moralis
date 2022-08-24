@@ -22,7 +22,7 @@ const ConnectButton: React.FC = () => {
         console.log("비어있는 계정(null account)이 감지되어 연결을 해제했습니다.")
       }
     })
-  })
+  }, []);
 
   const onClickHandler = async () => {
     console.log("handler start")
