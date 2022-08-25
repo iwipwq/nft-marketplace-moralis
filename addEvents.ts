@@ -1,4 +1,5 @@
-import Moralis from "moralis-v1/node.js";
+// import Moralis from "moralis-v1/node.js";
+import Moralis from "moralis/node.js";
 import "dotenv/config";
 import contractAddresses from "./constants/networkMapping.json";
 
