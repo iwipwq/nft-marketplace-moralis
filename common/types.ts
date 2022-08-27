@@ -4,7 +4,7 @@ interface RequestArguments {
     readonly params?: readonly unknown[] | object;
   }
 
-declare function EthRequest(args:RequestArguments):any
+declare function EthRequest(args:RequestArguments):unknown
 
 export interface EthereumProvider {
     isMetaMask?: boolean;
@@ -15,4 +15,15 @@ declare global {
     interface Window {
         ethereum?: EthereumProvider;
     }
+}
+
+// Props
+export interface NftListedProps {
+    price?: string;
+    nftAddress?: string;
+    tokenId?: string;
+    marketplaceAddress?: string;
+    seller?: string;
+    createdAt?: object;
+    updatedAt?: object;
 }

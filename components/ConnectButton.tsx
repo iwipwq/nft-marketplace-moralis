@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useMoralis } from "react-moralis";
-import { EthereumProvider } from "../common/types";
+// import { EthereumProvider } from "../common/types";
 const ConnectButton: React.FC = () => {
   const {
     enableWeb3,
@@ -71,13 +71,13 @@ const ConnectButton: React.FC = () => {
     }
 }
 
-interface Promise<T> {
-    accounts(onfinally?: (() => void) | undefined | null): Promise<T>
-}
+// interface Promise<T> {
+//     accounts(onfinally?: (() => void) | undefined | null): Promise<T>
+// }
 
 async function accounts(){
     if(typeof window.ethereum !== "undefined") {
-        await window.ethereum.request!({
+        await window.ethereum.request({
             method: "wallet_requestPermissions",
             params: [{
                 eth_accounts: {}
@@ -120,12 +120,11 @@ async function accounts(){
   return (
     <>
       <button onClick={onClickHandler} disabled={isWeb3EnableLoading}>
-        {isWeb3Enabled ? `${account}에 연결되었습니다` : `연결하기`}
+        {isWeb3Enabled ? `${account?.slice(0,4)}...${account?.slice(-4)} 에 연결되었습니다` : `연결하기`}
       </button>
-      <button onClick={requestTest}>eth_requestAccounts Request</button>
+      {/* <button onClick={requestTest}>eth_requestAccounts Request</button>
       <button onClick={getPermissionsResponse}>getPermissions</button>
-      <button onClick={perTest}>perTest</button>
-      <p>{}</p>
+      <button onClick={perTest}>perTest</button> */}
     </>
   );
 };
