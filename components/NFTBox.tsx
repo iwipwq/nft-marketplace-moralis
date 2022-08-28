@@ -6,6 +6,7 @@ import BasicNftAbi from "../constants/BasicNft.json";
 import Image from "next/image";
 import { Card } from "web3uikit";
 import { ethers, BigNumberish } from "ethers";
+import {truncateStr} from "../common/utils";
 
 export default function NFTBox({
   price,
@@ -18,7 +19,7 @@ export default function NFTBox({
   const [tokenName, setTokenName] = useState<string | undefined>();
   const [tokenDesc, setTokenDesc] = useState<string | undefined>();
   const [tokenAttr, setTokenAttr] = useState<object | undefined>();
-  const { isWeb3Enabled } = useMoralis();
+  const { isWeb3Enabled, account } = useMoralis();
 
   const { runContractFunction: getTokenURI } = useWeb3Contract({
     abi: BasicNftAbi,
@@ -62,6 +63,9 @@ export default function NFTBox({
     }
   }, [isWeb3Enabled]);
 
+  const isOwnedByUser = seller === account || seller === undefined;
+  const formattedSellerAddress = isOwnedByUser ? "나" : truncateStr(seller || "", 15);
+
   return (
     <Card>
       {imageURI ? (
@@ -76,7 +80,7 @@ export default function NFTBox({
           <h2 className="font-bold text-lg">
             # {tokenId} {tokenName}
           </h2>
-          <div className="italic text-sm">판매자:{seller}</div>
+          <div className="italic text-sm">소유자:{formattedSellerAddress}</div>
           <div className="font-bold">
             {ethers.utils.formatUnits(price as BigNumberish, "ether")} ETH
           </div>
