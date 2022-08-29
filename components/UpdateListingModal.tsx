@@ -3,7 +3,7 @@ import { Modal, Input, ModalProps, useNotification } from "web3uikit";
 import { NftListedProps } from "./NFTBox";
 import { useWeb3Contract } from "react-moralis";
 import nftMarketplaceAbi from "../constants/NftMarketplace.json";
-import { ethers } from "ethers";
+import { ethers, ContractTransaction } from "ethers";
 
 export interface UpdatedListingModalProps extends NftListedProps, ModalProps {}
 
@@ -14,7 +14,7 @@ export default function UpdateListingModal({
   onCloseButtonPressed,
   marketplaceAddress,
 }: UpdatedListingModalProps) {
-  const dispatch = useNotification()
+  const dispatch = useNotification();
 
   const [priceToUpdatedListingWith, setPriceToUpdateListingWith] = useState<
     string | undefined
@@ -31,8 +31,23 @@ export default function UpdateListingModal({
     },
   });
 
-  const handleUpdateListingSuccess = () => {
+  function isContractTransaction (sus:any): sus is ContractTransaction {
+    return (
+      typeof sus === "object" && sus !== null && "wait" in sus
+    )
+  }
 
+  const handleUpdateListingSuccess = async<T,>(tx?:T) => {
+    if(isContractTransaction(tx)) {
+      await tx.wait(1);
+    }
+    dispatch({
+      type:"success",
+      title:"트랜잭션 성공",
+      message:"판매 NFT 정보를 수정했습니다.",
+      icon:"update",
+      position:"topR",
+    })
   }
 
   return (
@@ -43,7 +58,7 @@ export default function UpdateListingModal({
       onOk={async () =>
         await updateListing({
           onError(error) {console.log(error)},
-          onSuccess: () => handleUpdateListingSuccess()
+          onSuccess: handleUpdateListingSuccess
         })
       }
     >

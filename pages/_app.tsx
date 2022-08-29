@@ -20,7 +20,7 @@ const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL!;
 // type NotificationProvider = React.ReactNode
 
 
-function MyApp({ Component, pageProps }: AppProps, NotificationProviderprops:any) {
+function MyApp({ Component, pageProps }: AppProps, DUMMY:any) {
   return (
     <>
       <Head>
@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps, NotificationProviderprops:any
       <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL}>
         <div></div>
         {/* <foo></foo> */}
-        <NotificationProvider {...NotificationProviderprops}>
+        <NotificationProvider {...DUMMY}>
           <Header />
           <Component {...pageProps} />
         </NotificationProvider>
