@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import styles from "../styles/Home.module.css";
-import NFTBox from "../components/NFTbox";
+import NFTBox from "../components/NFTBox";
 
 const Home: NextPage = () => {
   const { isWeb3Enabled } = useMoralis();

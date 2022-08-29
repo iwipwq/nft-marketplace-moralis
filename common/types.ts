@@ -16,14 +16,3 @@ declare global {
         ethereum?: EthereumProvider;
     }
 }
-
-// Props
-export interface NftListedProps {
-    price?: string;
-    nftAddress?: string;
-    tokenId?: string;
-    marketplaceAddress?: string;
-    seller?: string;
-    createdAt?: object;
-    updatedAt?: object;
-}

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useMoralis } from "react-moralis";
 // import { EthereumProvider } from "../common/types";
-const ConnectButton: React.FC = () => {
+const ConnectButton = () => {
   const {
     enableWeb3,
     isWeb3Enabled,

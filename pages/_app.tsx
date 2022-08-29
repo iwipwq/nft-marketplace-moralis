@@ -3,11 +3,24 @@ import type { AppProps } from "next/app";
 import Header from "../components/Header";
 import { MoralisProvider } from "react-moralis";
 import Head from "next/head";
+import { NotificationProvider } from "web3uikit";
 
 const APP_ID = process.env.NEXT_PUBLIC_APP_ID!;
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL!;
 
-function MyApp({ Component, pageProps }: AppProps) {
+// declare global {
+//   namespace JSX {
+//     interface IntrinsicElements {
+//       NotificationProvider: {children: Element[]}
+//       foo: {}
+//     }
+//   }
+// }
+
+// type NotificationProvider = React.ReactNode
+
+
+function MyApp({ Component, pageProps }: AppProps, NotificationProviderprops:any) {
   return (
     <>
       <Head>
@@ -16,8 +29,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL}>
-        <Header />
-        <Component {...pageProps} />
+        <div></div>
+        {/* <foo></foo> */}
+        <NotificationProvider {...NotificationProviderprops}>
+          <Header />
+          <Component {...pageProps} />
+        </NotificationProvider>
       </MoralisProvider>
     </>
   );

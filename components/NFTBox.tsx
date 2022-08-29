@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useMoralis, useWeb3Contract } from "react-moralis";
-import { NftListedProps } from "../common/types";
 import NftMarketplaceAbi from "../constants/NftMarketplace.json";
 import BasicNftAbi from "../constants/BasicNft.json";
 import Image from "next/image";
 import { Card } from "web3uikit";
 import { ethers, BigNumberish } from "ethers";
-import {truncateStr} from "../common/utils";
+import { truncateStr } from "../common/utils";
+import UpdateListingModal from "./UpdateListingModal";
+
+export interface NftListedProps {
+  price?: string;
+  nftAddress?: string;
+  tokenId?: string;
+  marketplaceAddress?: string;
+  seller?: string;
+  createdAt?: object;
+  updatedAt?: object;
+}
 
 export default function NFTBox({
   price,
@@ -15,11 +25,12 @@ export default function NFTBox({
   marketplaceAddress,
   seller,
 }: NftListedProps) {
+  const { isWeb3Enabled, account } = useMoralis();
   const [imageURI, setImageURI] = useState<string | undefined>();
   const [tokenName, setTokenName] = useState<string | undefined>();
   const [tokenDesc, setTokenDesc] = useState<string | undefined>();
   const [tokenAttr, setTokenAttr] = useState<object | undefined>();
-  const { isWeb3Enabled, account } = useMoralis();
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   const { runContractFunction: getTokenURI } = useWeb3Contract({
     abi: BasicNftAbi,
@@ -64,30 +75,54 @@ export default function NFTBox({
   }, [isWeb3Enabled]);
 
   const isOwnedByUser = seller === account || seller === undefined;
-  const formattedSellerAddress = isOwnedByUser ? "나" : truncateStr(seller || "", 15);
+  const formattedSellerAddress = isOwnedByUser
+    ? "나"
+    : truncateStr(seller || "", 15);
+
+  const handleCardClick = () => {
+    isOwnedByUser ? setShowModal(true) : console.log("구매페이지로");
+  };
+
+  const onCloseButtonPressed = () => {
+    isOwnedByUser
+      ? (console.log("triggerd"), setShowModal(false))
+      : console.log("NFT소유자가 아니여서 명령을 수행할 수 없습니다.");
+  };
 
   return (
-    <Card>
-      {imageURI ? (
-        <div className="mx-2 my-2">
-          <Image
-            className="object-cover"
-            loader={() => imageURI}
-            src={imageURI}
-            width="200"
-            height="200"
-          />
-          <h2 className="font-bold text-lg">
-            # {tokenId} {tokenName}
-          </h2>
-          <div className="italic text-sm">소유자:{formattedSellerAddress}</div>
-          <div className="font-bold">
-            {ethers.utils.formatUnits(price as BigNumberish, "ether")} ETH
+    <>
+      <UpdateListingModal
+        children={<></>}
+        isVisible={showModal}
+        onCloseButtonPressed={onCloseButtonPressed}
+        nftAddress={nftAddress}
+        tokenId={tokenId}
+        marketplaceAddress={marketplaceAddress}
+      />
+      <Card onClick={handleCardClick}>
+        {imageURI ? (
+          <div className="mx-2 my-2">
+            <Image
+              className="object-cover"
+              loader={() => imageURI}
+              src={imageURI}
+              width="200"
+              height="200"
+            />
+            <h2 className="font-bold text-lg">
+              # {tokenId} {tokenName}
+            </h2>
+            <div className="italic text-sm">
+              소유자:{formattedSellerAddress}
+            </div>
+            <div className="font-bold">
+              {ethers.utils.formatUnits(price as BigNumberish, "ether")} ETH
+            </div>
           </div>
-        </div>
-      ) : (
-        <div>이미지 로딩중 ...</div>
-      )}
-    </Card>
+        ) : (
+          <div>이미지 로딩중 ...</div>
+        )}
+      </Card>
+    </>
   );
 }
