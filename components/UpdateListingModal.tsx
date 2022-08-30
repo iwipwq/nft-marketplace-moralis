@@ -5,13 +5,15 @@ import { useWeb3Contract } from "react-moralis";
 import nftMarketplaceAbi from "../constants/NftMarketplace.json";
 import { ethers, ContractTransaction } from "ethers";
 
-export interface UpdatedListingModalProps extends NftListedProps, ModalProps {}
+export interface UpdatedListingModalProps extends NftListedProps, ModalProps {
+  onCloseButtonPressed: () => void
+}
 
 export default function UpdateListingModal({
   nftAddress,
   tokenId,
   isVisible,
-  onCloseButtonPressed,
+  onCloseButtonPressed:onClose,
   marketplaceAddress,
 }: UpdatedListingModalProps) {
   const dispatch = useNotification();
@@ -38,8 +40,10 @@ export default function UpdateListingModal({
   }
 
   const handleUpdateListingSuccess = async<T,>(tx?:T) => {
+    console.log("모달창의 인풋값(수정된 가격)",priceToUpdatedListingWith);
     if(isContractTransaction(tx)) {
-      await tx.wait(1);
+      const receipt = await tx.wait(1);
+      console.log(receipt);
     }
     dispatch({
       type:"success",
@@ -48,13 +52,16 @@ export default function UpdateListingModal({
       icon:"update",
       position:"topR",
     })
+    onClose && onClose();
+    setPriceToUpdateListingWith("0");
+    console.log("수정 후 모달창의 인풋값",priceToUpdatedListingWith);
   }
 
   return (
     <Modal
       isVisible={isVisible}
-      onCloseButtonPressed={onCloseButtonPressed}
-      onCancel={onCloseButtonPressed}
+      onCloseButtonPressed={onClose}
+      onCancel={onClose}
       onOk={async () =>
         await updateListing({
           onError(error) {console.log(error)},

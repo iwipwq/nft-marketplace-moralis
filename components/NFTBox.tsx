@@ -3,7 +3,7 @@ import { useMoralis, useWeb3Contract } from "react-moralis";
 import NftMarketplaceAbi from "../constants/NftMarketplace.json";
 import BasicNftAbi from "../constants/BasicNft.json";
 import Image from "next/image";
-import { Card } from "web3uikit";
+import { Card, useNotification } from "web3uikit";
 import { ethers, BigNumberish } from "ethers";
 import { truncateStr } from "../common/utils";
 import UpdateListingModal from "./UpdateListingModal";
@@ -32,6 +32,8 @@ export default function NFTBox({
   const [tokenAttr, setTokenAttr] = useState<object | undefined>();
   const [showModal, setShowModal] = useState<boolean>(false);
 
+  const dispatch = useNotification();
+
   const { runContractFunction: getTokenURI } = useWeb3Contract({
     abi: BasicNftAbi,
     contractAddress: nftAddress,
@@ -40,6 +42,17 @@ export default function NFTBox({
       tokenId: tokenId,
     },
   });
+
+  const { runContractFunction: buyItem } = useWeb3Contract({
+    abi: NftMarketplaceAbi,
+    contractAddress: marketplaceAddress,
+    functionName: "buyItem",
+    msgValue: price,
+    params: {
+      nftAddress: nftAddress,
+      tokenId: tokenId,
+    }
+  })
 
   async function updateUI() {
     const tokenURI = await getTokenURI();
@@ -80,10 +93,23 @@ export default function NFTBox({
     : truncateStr(seller || "", 15);
 
   const handleCardClick = () => {
-    isOwnedByUser ? setShowModal(true) : console.log("구매페이지로");
+    isOwnedByUser ? setShowModal(true) : buyItem({
+      onError: (error) => console.log(error),
+      onSuccess: () => handleBuyItemSuccess()
+    })
   };
 
-  const onCloseButtonPressed = () => {
+  const handleBuyItemSuccess = async function () {
+    dispatch({
+      type:"success",
+      position:"topR",
+      title:"아이템 구매 성공",
+      icon:"bell",
+      message:"NFT 구매에 성공했습니다."
+    })
+  }
+
+  const onClose = () => {
     isOwnedByUser
       ? (console.log("triggerd"), setShowModal(false))
       : console.log("NFT소유자가 아니여서 명령을 수행할 수 없습니다.");
@@ -94,7 +120,7 @@ export default function NFTBox({
       <UpdateListingModal
         children={<></>}
         isVisible={showModal}
-        onCloseButtonPressed={onCloseButtonPressed}
+        onCloseButtonPressed={onClose}
         nftAddress={nftAddress}
         tokenId={tokenId}
         marketplaceAddress={marketplaceAddress}
