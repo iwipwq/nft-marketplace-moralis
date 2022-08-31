@@ -38,7 +38,7 @@ const Home: NextPage = (FormProps: any) => {
     console.log("승인하는중...");
     const nftAddress = data.data[0].inputResult
     const tokenId = data.data[1].inputResult
-    const price = ethers.utils.parseUnits(data.data[2].inputResult, "ehters").toString(); 
+    const price = ethers.utils.parseUnits(data.data[2].inputResult, "ether").toString(); 
 
     const approveOptions = {
       abi: basicNftAbi,
