@@ -8,18 +8,6 @@ import { NotificationProvider } from "web3uikit";
 const APP_ID = process.env.NEXT_PUBLIC_APP_ID!;
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL!;
 
-// declare global {
-//   namespace JSX {
-//     interface IntrinsicElements {
-//       NotificationProvider: {children: Element[]}
-//       foo: {}
-//     }
-//   }
-// }
-
-// type NotificationProvider = React.ReactNode
-
-
 function MyApp({ Component, pageProps }: AppProps, DUMMY:any) {
   return (
     <>
@@ -29,8 +17,6 @@ function MyApp({ Component, pageProps }: AppProps, DUMMY:any) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MoralisProvider appId={APP_ID} serverUrl={SERVER_URL}>
-        <div></div>
-        {/* <foo></foo> */}
         <NotificationProvider {...DUMMY}>
           <Header />
           <Component {...pageProps} />

@@ -54,9 +54,9 @@ export default function UpdateListingModal({
     })
     onClose && onClose();
     setPriceToUpdateListingWith("0");
-    console.log("수정 후 모달창의 인풋값",priceToUpdatedListingWith);
   }
 
+  console.log("수정 후 모달창의 인풋값",priceToUpdatedListingWith);
   return (
     <Modal
       isVisible={isVisible}
