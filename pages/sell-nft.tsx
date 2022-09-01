@@ -9,6 +9,7 @@ import basicNftAbi from "../constants/BasicNft.json";
 import nftMarketplaceAbi from "../constants/NftMarketplace.json";
 import networkMapping from "../constants/networkMapping.json"
 import { useMoralis, useWeb3Contract } from "react-moralis";
+import Withdraw from "../components/Withdraw";
 
 declare module "web3uikit" {
   interface FormProps {
@@ -107,7 +108,7 @@ const Home: NextPage = (FormProps: any) => {
         id="Main Form"
         {...FormProps}
       ></Form>
-      sellnft page
+      <Withdraw/>
     </div>
   );
 };
